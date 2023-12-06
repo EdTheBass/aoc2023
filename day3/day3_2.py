@@ -26,22 +26,44 @@ def find_asterisk(inp, line, l, r):
     right = line_text[r_i]
     down = inp[d_i][l_i:r_i+1]
 
-    if "*" in up:
-        return u_i, l+up.index("*")-1
-    if "*" in left:
-        return line, l-1
-    if "*" in right:
-        return line, 
+    u_stars = re.finditer(r"\*", up)
+    l_star = l_i if "*" in left else -1
+    r_star = r_i if "*" in right else -1
+    d_stars = re.finditer(r"\*", down)
+    total_stars = []
+    for _ in u_stars:
+        s = _.span()[0]
+        total_stars.append(tuple([line-1, l_i+s]))
+    if l_star != -1:
+        total_stars.append(tuple([line, l_star]))
+    if r_star != -1:
+        total_stars.append(tuple([line, r_star]))
+    for _ in d_stars:
+        s = _.span()[0]
+        total_stars.append(tuple([line+1, l_i+s]))
+    return total_stars
+
 
 def find_part_nums(inp):
     total = 0
+    asterisks = {}
     for i,line in enumerate(inp):
         numbers = re.finditer(r"\d+", line)
         for n in numbers:
             l,r = n.span()
-            adjacents = find_adjacents(inp, i, l, r)
-            if re.search(r"[^\d.\n]", adjacents) is not None:
-                total += int(n.group())
+            n_match = n.group(0)
+            a_s = find_asterisk(inp, i, l, r)
+            for _ in a_s:
+                if not asterisks.get(_): asterisks.update({_:[n_match]}) 
+                else: asterisks[_].append(n_match)
+
+    vals = asterisks.values()
+    for v in vals:
+        if len(v) == 2:
+            gear_num = int(v[0]) * int(v[1])
+            total += gear_num
+    
     return total
 
-print(find_part_nums(puzzle_input),)
+# fuck this puzzle
+print(find_part_nums(puzzle_input))

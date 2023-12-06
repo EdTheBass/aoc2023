@@ -16,7 +16,6 @@ def points(line):
     card_num = int(re.search(r"Card *(\d+)", line).group(1))
     winning_nums = list(dict.fromkeys([int(n) for n in re.findall(r"(\d+(?=.*\|)(?!.*:))", line)]))
     my_numbers = list(dict.fromkeys([int(n) for n in re.findall(r"(\d+(?!.*\|))", line)]))
-    print(line, my_numbers)
     for num in my_numbers:
         if num in winning_nums:
             matches *= 2
@@ -34,4 +33,3 @@ def total_points(inp):
 
 
 print(total_points(puzzle_input))
-
