@@ -13,7 +13,6 @@ with open("day4.txt", "r") as puzzle_input_file:
 
 def points(line):
     matches = 0
-    card_num = int(re.search(r"Card *(\d+)", line).group(1))
     winning_nums = list(dict.fromkeys([int(n) for n in re.findall(r"(\d+(?=.*\|)(?!.*:))", line)]))
     my_numbers = list(dict.fromkeys([int(n) for n in re.findall(r"(\d+(?!.*\|))", line)]))
     
