@@ -15,22 +15,25 @@ def points(line):
     matches = 0
     winning_nums = list(dict.fromkeys([int(n) for n in re.findall(r"(\d+(?=.*\|)(?!.*:))", line)]))
     my_numbers = list(dict.fromkeys([int(n) for n in re.findall(r"(\d+(?!.*\|))", line)]))
-    
     for num in my_numbers:
         if num in winning_nums:
             matches += 1
     
-    return matches+1 if matches else 
+    return matches
 
 
 def total_points(inp):
-    total = 0
-    for l in inp:
+    instances = [1] * len(inp)
+    for i,l in enumerate(inp):
         num = points(l.strip())
-        print(num)
-        total += num
+        multiplier = instances[i]
+        for _ in range(1,num+1):
+            try:
+                instances[i+_] += multiplier
+            except IndexError:
+                continue
 
-    return total
+    return sum(instances)
 
 
 print(total_points(puzzle_input))
