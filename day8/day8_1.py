@@ -47,4 +47,3 @@ def steps_required(inp):
 
 
 print(steps_required(puzzle_input))
-
