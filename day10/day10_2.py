@@ -1,16 +1,25 @@
 import re
 
-test_input1 = """.....
-.S-7.
-.|.|.
-.L-J.
-.....""".splitlines()
+test_input1 = """..........
+.S------7.
+.|F----7|.
+.||....||.
+.||....||.
+.|L-7F-J|.
+.|..||..|.
+.L--JL--J.
+..........""".splitlines()
 
-test_input2 = """7-F7-
-.FJ|7
-SJLL7
-|F--J
-LJ.LJ""".splitlines()
+test_input2 = """FF7FSF7F7F7F7F7F---7
+L|LJ||||||||||||F--J
+FL-7LJLJ||||||LJL-77
+F--JF--7||LJLJ7F7FJ-
+L---JF-JLJ.||-FJLJJ7
+|F|F-JF---7F7-L7L|7|
+|FFJF7L7F-JF7|JL---7
+7-L-JL7||F7|L7F-7F7|
+L.L7LFJ|||||FJL7||LJ
+L7JLJL-JLJLJL--JLJ.L""".splitlines()
 
 with open("day10.txt", "r") as puzzle_input_file:
     puzzle_input = puzzle_input_file.readlines()
@@ -61,7 +70,7 @@ def traverse(start, inp):
             break
         path.append(curr)
 
-    return len(path)
+    return path
 
 def longest_path(inp):
     global height,max_height
@@ -72,8 +81,14 @@ def longest_path(inp):
             start = [i, l.index("S")]
             break
     
-    p_length = traverse(start,inp)
+    path = traverse(start, inp)
+    for i in range(len(inp)): 
+        for j in range(len(inp[0])): 
+            if [i,j] not in path: 
+                inp[i] = inp[i][:j] + "." + inp[i][j+1:]
+    
+    
 
-    return p_length//2
+    return 1
 
-print(longest_path(puzzle_input))
+print(longest_path(test_input2))
